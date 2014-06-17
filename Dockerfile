@@ -24,7 +24,6 @@ ADD /config/sshd_config /etc/ssh/sshd_config
 ADD /00_regen_ssh_host_keys.sh /etc/my_init.d/
 ADD /insecure_key.pub /etc/insecure_key.pub
 ADD /insecure_key /etc/insecure_key
-RUN chmod 644 /etc/insecure_key* 
 ADD /enable_insecure_key /usr/sbin/enable_insecure_key
 
 #INIT
@@ -37,6 +36,7 @@ ADD /runit/syslog-ng /etc/service/syslog-ng/run
 ADD /setuser /sbin/setuser
 
 #### Executing all Transactions in Single Processes so they can be cached and replaced better with new packages
+RUN chmod 644 /etc/insecure_key* 
 RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building faster." && \
     echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup 66 \
     echo "ubuntu-baseimage: Fix some issues with APT packages. See https://github.com/dotcloud/docker/issues/1024" && \
