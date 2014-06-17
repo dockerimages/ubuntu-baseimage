@@ -1,35 +1,35 @@
 FROM ubuntu:14.04
-MAINTAINER Phusion <info@phusion.nl>
+MAINTAINER Frank Lemanschik <info@dspeed.eu>
 
 ENV HOME /root
+ENV LC_ALL C
+ENV DEBIAN_FRONTEND noninteractive
+ENV APT_OPT '-y --no-install-recommends'
+ENV INITRD=no
+
 RUN mkdir /build
 ADD . /build
+################## Modify Base Ubuntu Image 
 
-
-#!/bin/bash
-set -e
-source /build/buildconfig
-set -x
+#RUN 	set -e && \
+#	export LC_ALL=C && \
+#	export DEBIAN_FRONTEND=noninteractive && \
+#	minimal_apt_get_install='apt-get install -y --no-install-recommends' && \
+#	set -x
 
 ## Temporarily disable dpkg fsync to make building faster.
-echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup
+RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup
+
+## Fix some issues with APT packages.
+## See https://github.com/dotcloud/docker/issues/1024
+RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN ln -sf /bin/true /sbin/initctl
 
 ## Prevent initramfs updates from trying to run grub and lilo.
 ## https://journal.paul.querna.org/articles/2013/10/15/docker-ubuntu-on-rackspace/
 ## http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=594189
-export INITRD=no
-mkdir -p /etc/container_environment
-echo -n no > /etc/container_environment/INITRD
-
-## Enable Ubuntu Universe and Multiverse.
-sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
-sed -i 's/^#\s*\(deb.*multiverse\)$/\1/g' /etc/apt/sources.list
-apt-get update
-
-## Fix some issues with APT packages.
-## See https://github.com/dotcloud/docker/issues/1024
-dpkg-divert --local --rename --add /sbin/initctl
-ln -sf /bin/true /sbin/initctl
+RUN mkdir -p /etc/container_environment
+RUN echo -n no > /etc/container_environment/INITRD
 
 ## Replace the 'ischroot' tool to make it always return true.
 ## Prevent initscripts updates from breaking /dev/shm.
@@ -38,16 +38,23 @@ ln -sf /bin/true /sbin/initctl
 dpkg-divert --local --rename --add /usr/bin/ischroot
 ln -sf /bin/true /usr/bin/ischroot
 
-## Install HTTPS support for APT.
-$minimal_apt_get_install apt-transport-https ca-certificates
+## Enable Ubuntu Universe and Multiverse.
+RUN sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
+RUN sed -i 's/^#\s*\(deb.*multiverse\)$/\1/g' /etc/apt/sources.list
+RUN apt-get update -y
 
-## Upgrade all packages.
-apt-get dist-upgrade -y --no-install-recommends
+## Install HTTPS support for APT.
+RUN apt-get install $APT_OPT  apt-transport-https ca-certificates
 
 ## Fix locale.
-$minimal_apt_get_install language-pack-en
+apt-get install $APT_OPT language-pack-en
 locale-gen en_US
 
+## Upgrade all packages.
+RUN apt-get dist-upgrade $APT_OPT
+
+
+################## System Services
 
 
 RUN /build/prepare.sh && \
