@@ -4,7 +4,6 @@ MAINTAINER Frank Lemanschik <info@dspeed.eu>
 ENV HOME /root
 ENV LC_ALL C
 ENV DEBIAN_FRONTEND noninteractive
-ENV APT_IOPT '--no-install-recommends -y'
 ENV INITRD no
 
 RUN mkdir /build
@@ -44,10 +43,10 @@ RUN dpkg-divert --local --rename --add /usr/bin/ischroot && \
 #    apt-get update -y
 
 ## Install HTTPS support for APT.
-RUN apt-get $APT_OPT install apt-transport-https ca-certificates
+RUN apt-get --no-install-recommends install -y apt-transport-https ca-certificates
 
 ## Fix locale.
-RUN apt-get $APT_OPT install language-pack-en && \
+RUN apt-get --no-install-recommends install -y language-pack-en && \
     locale-gen en_US
 
 ## Upgrade all packages.
