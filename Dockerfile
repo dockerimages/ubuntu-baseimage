@@ -54,11 +54,9 @@ RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building fast
     dpkg-divert --local --rename --add /usr/bin/ischroot && \
     ln -sf /bin/true /usr/bin/ischroot && \
     echo "ubuntu-baseimage: Upgrade sources.list to mirrors." && \
-    echo "ubuntu-baseimage: Upgrade all packages."
-    
-RUN apt-get dist-upgrade -y && \
-    apt-get --no-install-recommends install -y runit syslog-ng-core logrotate openssh-server cron curl less nano vim psmisc \n
-    git wget curl  apt-transport-https ca-certificates language-pack-en && \
+    echo "ubuntu-baseimage: Upgrade all packages." && \
+    apt-get dist-upgrade -y && \
+    apt-get --no-install-recommends install -y runit syslog-ng-core logrotate openssh-server cron curl less nano vim psmisc git wget curl  apt-transport-https ca-certificates language-pack-en && \
     echo "Syslog-NG: Creating some needed dirs and files" && \
     mkdir -p /var/lib/syslog-ng && \
     echo "ubuntu-baseimage:# Replace the system() source because inside Docker we" && \
