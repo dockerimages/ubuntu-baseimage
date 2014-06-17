@@ -50,7 +50,7 @@ RUN apt-get --no-install-recommends install -y language-pack-en && \
     locale-gen en_US
 
 ## Upgrade all packages.
-RUN apt-get dist-upgrade $APT_OPT
+RUN apt-get dist-upgrade -y
 
 ################## System Services
 
@@ -65,10 +65,10 @@ RUN mkdir -p /etc/my_init.d && \
     chmod 600 /etc/container_environment.sh /etc/container_environment.json
 
 ## Install runit.
-RUN apt-get install $APT_OPT runit
+RUN apt-apt-get --no-install-recommends install -y runit
 
 ## Install a syslog daemon.
-RUN apt-get install $APT_OPT syslog-ng-core && \
+RUN apt-get --no-install-recommends install -y syslog-ng-core && \
     mkdir /etc/service/syslog-ng && \
     cp /build/runit/syslog-ng /etc/service/syslog-ng/run && \
     mkdir -p /var/lib/syslog-ng && \
@@ -79,10 +79,10 @@ RUN apt-get install $APT_OPT syslog-ng-core && \
 RUN sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf
 
 ## Install logrotate.
-RUN apt-get $APT_OPT install logrotate
+RUN apt-get --no-install-recommends install -y logrotate
 
 ## Install the SSH server.
-RUN apt-get install $APT_OPT openssh-server && \
+RUN apt-get --no-install-recommends install -y openssh-server && \
     mkdir /var/run/sshd
     mkdir /etc/service/sshd
     cp /build/runit/sshd /etc/service/sshd/run
@@ -100,14 +100,14 @@ RUN mkdir -p /root/.ssh && \
     cp /build/enable_insecure_key /usr/sbin/
 
 ## Install cron daemon.
-RUN apt-get install $APT_OPT cron && \
+RUN apt-get --no-install-recommends install -y cron && \
     mkdir /etc/service/cron && \
     cp /build/runit/cron /etc/service/cron/run
 
 
 ####################### Utils 
 ## Often used tools.
-RUN apt-get install $APT_OPT curl less nano vim psmisc git wget curl
+RUN apt-get --no-install-recommends install -y curl less nano vim psmisc git wget curl
 
 ## This tool runs a command as another user and sets $HOME.
 ADD /setuser /sbin/setuser
