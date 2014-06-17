@@ -87,4 +87,45 @@ RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building fast
     echo "ubuntu-baseimage: # Checks for lost+found and scans for mtab." && \
     rm -f /etc/cron.daily/standard
 
+
+#### super visor related
+mkdir -p -m0700 /var/run/sshd
+cat > /etc/supervisor/conf.d/sshd.conf <<EOF
+[program:sshd]
+directory=/
+command=/usr/sbin/sshd -D
+user=root
+autostart=false
+autorestart=true
+stdout_logfile=/var/log/supervisor/%(program_name)s.log
+stderr_logfile=/var/log/supervisor/%(program_name)s_error.log
+EOF
+
+cat > /etc/supervisor/conf.d/cron.conf <<EOF
+[program:cron]
+priority=20
+directory=/tmp
+command=/usr/sbin/cron -f
+user=root
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/supervisor/%(program_name)s.log
+stderr_logfile=/var/log/supervisor/%(program_name)s.log
+EOF
+
+cat > /etc/logrotate.d/supervisord <<EOF
+/var/log/supervisor/*.log {
+    weekly
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    copytruncate
+}
+EOF
+#### runit related
+
+
+
 CMD ["/sbin/my_init"]
