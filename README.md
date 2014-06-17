@@ -4,9 +4,14 @@ deb mirror://mirrors.ubuntu.com/mirrors.txt precise-updates main restricted univ
 deb mirror://mirrors.ubuntu.com/mirrors.txt precise-backports main restricted universe multiverse
 deb mirror://mirrors.ubuntu.com/mirrors.txt precise-security main restricted universe multiverse
 
-
-
-
+# Building a Image from Scratch since you need a from Instruction you need to import a empty tar bal as image scratch or pull image sratch from docker
+sudo debootstrap utopic utopic > /dev/null
+sudo tar -C utopic -c . | sudo docker import - utopic
+sudo docker 
+RUN echo DISTRIB_ID=Ubuntu > /etc/lsb-release && \ 
+    echo DISTRIB_RELEASE=14.10 >> /etc/lsb-release && \
+    echo DISTRIB_CODENAME=utopic >> /etc/lsb-release && \
+    echo DISTRIB_DESCRIPTION="Ubuntu 14.10 Unicorn" >> /etc/lsb-release
 
 # A minimal Ubuntu base image modified for Docker-friendliness
 
