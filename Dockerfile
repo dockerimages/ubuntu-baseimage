@@ -72,7 +72,7 @@ RUN apt-get --no-install-recommends install -y syslog-ng-core && \
     mkdir /etc/service/syslog-ng && \
     cp /build/runit/syslog-ng /etc/service/syslog-ng/run && \
     mkdir -p /var/lib/syslog-ng && \
-    cp /build/config/syslog_ng_default /etc/default/syslog-ng && \
+    cp /build/config/syslog_ng_default /etc/default/syslog-ng
 
 # Replace the system() source because inside Docker we
 # can't access /proc/kmsg.
