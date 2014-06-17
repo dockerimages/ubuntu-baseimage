@@ -4,7 +4,7 @@ MAINTAINER Frank Lemanschik <info@dspeed.eu>
 ENV HOME /root
 ENV LC_ALL C
 ENV DEBIAN_FRONTEND noninteractive
-ENV APT_OPT '-y --no-install-recommends'
+ENV APT_IOPT '--no-install-recommends -y'
 ENV INITRD no
 
 RUN mkdir /build
@@ -44,10 +44,10 @@ RUN dpkg-divert --local --rename --add /usr/bin/ischroot && \
 #    apt-get update -y
 
 ## Install HTTPS support for APT.
-RUN apt-get install $APT_OPT  apt-transport-https ca-certificates
+RUN apt-get $APT_OPT install apt-transport-https ca-certificates
 
 ## Fix locale.
-RUN apt-get install $APT_OPT language-pack-en && \
+RUN apt-get $APT_OPT install language-pack-en && \
     locale-gen en_US
 
 ## Upgrade all packages.
@@ -80,7 +80,7 @@ RUN apt-get install $APT_OPT syslog-ng-core && \
 RUN sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf
 
 ## Install logrotate.
-RUN apt-get install $APT_OPT logrotate
+RUN apt-get $APT_OPT install logrotate
 
 ## Install the SSH server.
 RUN apt-get install $APT_OPT openssh-server && \
