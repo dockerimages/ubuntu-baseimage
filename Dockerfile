@@ -109,7 +109,21 @@ cp /build/runit/cron /etc/service/cron/run
 rm -f /etc/cron.daily/standard
 
 
+####################### Utils 
+## Often used tools.
+$minimal_apt_get_install curl less nano vim psmisc
 
+## This tool runs a command as another user and sets $HOME.
+cp /build/setuser /sbin/setuser
+
+####################### Cleanup
+apt-get clean
+rm -rf /build
+rm -rf /tmp/* /var/tmp/*
+rm -rf /var/lib/apt/lists/*
+rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
+
+rm -f /etc/ssh/ssh_host_*
 
 
 
