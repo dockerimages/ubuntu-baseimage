@@ -65,7 +65,7 @@ RUN mkdir -p /etc/my_init.d && \
     chmod 600 /etc/container_environment.sh /etc/container_environment.json
 
 ## Install runit.
-RUN apt-apt-get --no-install-recommends install -y runit
+RUN apt-get --no-install-recommends install -y runit
 
 ## Install a syslog daemon.
 RUN apt-get --no-install-recommends install -y syslog-ng-core && \
