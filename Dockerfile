@@ -57,7 +57,7 @@ RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building fast
     echo "ubuntu-baseimage: Upgrade all packages."
     
 RUN apt-get dist-upgrade -y && \
-    apt-get --no-install-recommends install -y runit syslog-ng-core logrotate openssh-server cron curl less nano vim psmisc \
+    apt-get --no-install-recommends install -y runit syslog-ng-core logrotate openssh-server cron curl less nano vim psmisc \n
     git wget curl  apt-transport-https ca-certificates language-pack-en && \
     echo "Syslog-NG: Creating some needed dirs and files" && \
     mkdir -p /var/lib/syslog-ng && \
