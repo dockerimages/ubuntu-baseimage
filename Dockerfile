@@ -15,25 +15,6 @@ ENV INITRD no
 #	set -x
 
 
-### Adding files at Start 
-
-# SYSLOG
-ADD /config/syslog_ng_default /etc/default/syslog-ng
-#SSH
-ADD /config/sshd_config /etc/ssh/sshd_config 
-ADD /00_regen_ssh_host_keys.sh /etc/my_init.d/
-ADD /insecure_key.pub /etc/insecure_key.pub
-ADD /insecure_key /etc/insecure_key
-ADD /enable_insecure_key /usr/sbin/enable_insecure_key
-
-#INIT
-ADD /my_init /sbin/my_init
-ADD /runit/sshd /etc/service/sshd/run 
-ADD /runit/cron /etc/service/cron/run
-ADD /runit/syslog-ng /etc/service/syslog-ng/run
-
-# ubuntu-baseimage: This tool runs a command as another user and sets $HOME.
-ADD /setuser /sbin/setuser
 
 #### Executing all Transactions in Single Processes so they can be cached and replaced better with new packages
 RUN chmod 644 /etc/insecure_key*
@@ -90,6 +71,29 @@ RUN mkdir -p /var/lib/syslog-ng && \
     echo "ubuntu-baseimage: ## Remove useless cron entries." && \
     echo "ubuntu-baseimage: # Checks for lost+found and scans for mtab." && \
     rm -f /etc/cron.daily/standard
+
+### Adding files at Start 
+
+# SYSLOG
+ADD /config/syslog_ng_default /etc/default/syslog-ng
+#SSH
+ADD /config/sshd_config /etc/ssh/sshd_config 
+ADD /00_regen_ssh_host_keys.sh /etc/my_init.d/
+ADD /insecure_key.pub /etc/insecure_key.pub
+ADD /insecure_key /etc/insecure_key
+ADD /enable_insecure_key /usr/sbin/enable_insecure_key
+
+#INIT
+ADD /my_init /sbin/my_init
+ADD /runit/sshd /etc/service/sshd/run 
+ADD /runit/cron /etc/service/cron/run
+ADD /runit/syslog-ng /etc/service/syslog-ng/run
+
+
+# ubuntu-baseimage: This tool runs a command as another user and sets $HOME.
+ADD /setuser /sbin/setuser
+
+
 
 
 #### super visor related
