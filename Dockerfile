@@ -57,14 +57,11 @@ RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building fast
     dpkg-divert --local --rename --add /usr/bin/ischroot && \
     ln -sf /bin/true /usr/bin/ischroot && \
     echo "ubuntu-baseimage: Upgrade sources.list to mirrors." && \
-    echo "ubuntu-baseimage: Upgrade all packages." && \
-    apt-get dist-upgrade -y && \
     apt-get --no-install-recommends install -y curl wget sudo net-tools pwgen unzip \
             supervisor language-pack-en software-properties-common runit syslog-ng-core \
             logrotate openssh-server cron less nano psmisc git apt-transport-https ca-certificates language-pack-en && \
-    echo "Syslog-NG: Creating some needed dirs and files"
-    
-RUN mkdir -p /var/lib/syslog-ng && \
+    echo "Syslog-NG: Creating some needed dirs and files" && \
+    mkdir -p /var/lib/syslog-ng && \
     echo "ubuntu-baseimage:# Replace the system() source because inside Docker we" && \
     echo "ubuntu-baseimage:# can't access /proc/kmsg." && \
     sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf && \
@@ -83,6 +80,8 @@ RUN mkdir -p /var/lib/syslog-ng && \
     echo "ubuntu-baseimage: Setting Locale to en_US" && \
     locale-gen en_US && \
     echo "ubuntu-baseimage: ####################### Cleanup" && \
+    echo "ubuntu-baseimage: Upgrade all packages." && \
+    apt-get dist-upgrade -y && \
     apt-get clean && \
     rm -rf /build && \
     rm -rf /tmp/* /var/tmp/* && \
