@@ -127,53 +127,7 @@ cat > /etc/logrotate.d/supervisord <<EOF
 }
 EOF
 
-#!/bin/bash
 
-set -e
-
-# generate a password for root.
-ROOT_PASSWORD=$(pwgen -c -n -1 12)
-echo "root:$ROOT_PASSWORD" | chpasswd
-echo User: root Password: $ROOT_PASSWORD
-
-# start supervisord
-/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
-supervisorctl start sshd
-
-appStart () {
-	tail -F /var/log/supervisor/supervisord.log
-}
-
-appHelp () {
-	echo "Available options:"
-	echo " app:start          - Start the app and watch the supervisor log (default)"
-	echo " app:help           - Displays the help"
-	echo " [command]          - Execute the specified linux command eg. bash."
-}
-
-case "$1" in
-	app:start)
-		appStart
-		;;
-	app:help)
-		appHelp
-		;;
-	*)
-		if [ -x $1 ]; then
-			$1
-		else
-			prog=$(which $1)
-			if [ -n "${prog}" ] ; then
-				shift 1
-				$prog $@
-			else
-				appHelp
-			fi
-		fi
-		;;
-esac
-
-exit 0
 
 #### runit related
 
