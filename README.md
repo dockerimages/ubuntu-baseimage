@@ -4,6 +4,13 @@ deb mirror://mirrors.ubuntu.com/mirrors.txt precise-updates main restricted univ
 deb mirror://mirrors.ubuntu.com/mirrors.txt precise-backports main restricted universe multiverse
 deb mirror://mirrors.ubuntu.com/mirrors.txt precise-security main restricted universe multiverse
 
+# Modify apt
+ou can make this the default behaviour by putting
+
+APT::Install-Suggests "true"
+
+in a file in /etc/apt/conf.d/, for example /etc/apt/conf.d/30install-suggests
+
 # Building a Image from Scratch since you need a from Instruction you need to import a empty tar bal as image scratch or pull image sratch from docker
 sudo debootstrap utopic utopic > /dev/null
 sudo tar -C utopic -c . | sudo docker import - utopic
