@@ -41,7 +41,7 @@ ADD /setuser /sbin/setuser
 RUN chmod 644 /etc/insecure_key*
 RUN apt-get update -y
 RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building faster." && \
-    echo #force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup 66 \
+    echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup && \
     echo "ubuntu-baseimage: Fix some issues with APT packages. See https://github.com/dotcloud/docker/issues/1024" && \
     dpkg-divert --local --rename --add /sbin/initctl && \
     ln -sf /bin/true /sbin/initctl && \
