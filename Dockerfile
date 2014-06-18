@@ -36,7 +36,8 @@ ADD /runit/syslog-ng /etc/service/syslog-ng/run
 ADD /setuser /sbin/setuser
 
 #### Executing all Transactions in Single Processes so they can be cached and replaced better with new packages
-RUN chmod 644 /etc/insecure_key* 
+RUN chmod 644 /etc/insecure_key*
+RUN apt-get update -y
 RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building faster." && \
     echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup 66 \
     echo "ubuntu-baseimage: Fix some issues with APT packages. See https://github.com/dotcloud/docker/issues/1024" && \
