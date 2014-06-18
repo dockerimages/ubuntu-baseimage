@@ -59,8 +59,9 @@ RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building fast
     apt-get --no-install-recommends install -y curl wget sudo net-tools pwgen unzip \
             supervisor language-pack-en software-properties-common runit syslog-ng-core \
             logrotate openssh-server cron less nano psmisc git apt-transport-https ca-certificates language-pack-en && \
-    echo "Syslog-NG: Creating some needed dirs and files" && \
-    mkdir -p /var/lib/syslog-ng && \
+    echo "Syslog-NG: Creating some needed dirs and files"
+    
+RUN mkdir -p /var/lib/syslog-ng && \
     echo "ubuntu-baseimage:# Replace the system() source because inside Docker we" && \
     echo "ubuntu-baseimage:# can't access /proc/kmsg." && \
     sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf && \
