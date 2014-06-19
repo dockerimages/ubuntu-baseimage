@@ -14,8 +14,6 @@ ENV INITRD no
 #	minimal_apt_get_install='apt-get install -y --no-install-recommends' && \
 #	set -x
 
-
-
 ### Adding files at Start 
 
 # SYSLOG
@@ -42,13 +40,13 @@ RUN chmod 644 /etc/insecure_key*
 RUN apt-get update -y
 RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building faster."
 RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup 
-RUN echo "ubuntu-baseimage: Fix some issues with APT packages. See https://github.com/dotcloud/docker/issues/1024" && \
-    dpkg-divert --local --rename --add /sbin/initctl && \
-    ln -sf /bin/true /sbin/initctl && \
+RUN echo "ubuntu-baseimage: Fix some issues with APT packages. See https://github.com/dotcloud/docker/issues/1024"
+RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN ln -sf /bin/true /sbin/initctl && \
     echo "ubuntu-baseimage: Prevent initramfs updates from trying to run grub and lilo." && \
     echo "ubuntu-baseimage: https://journal.paul.querna.org/articles/2013/10/15/docker-ubuntu-on-rackspace/" && \
-    echo "ubuntu-baseimage: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=594189" && \
-    mkdir -p /etc/container_environment && \
+    echo "ubuntu-baseimage: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=594189"
+RUN mkdir -p /etc/container_environment && \
     echo -n no > /etc/container_environment/INITRD && \
     echo "ubuntu-baseimage: Replace the 'ischroot' tool to make it always return true." && \
     echo "ubuntu-baseimage: Prevent initscripts updates from breaking /dev/shm." && \
@@ -104,7 +102,7 @@ ADD /setuser /sbin/setuser
 
 
 #### super visor related
-RUN mkdir -p -m0700 /var/run/sshd && cat > /etc/supervisor/conf.d/sshd.conf <<EOF
+RUN mkdir -p -m0700 /var/run/sshd && cat <<EOF > /etc/supervisor/conf.d/sshd.conf 
 [program:sshd]
 directory=/
 command=/usr/sbin/sshd -D
@@ -115,7 +113,7 @@ stdout_logfile=/var/log/supervisor/%(program_name)s.log
 stderr_logfile=/var/log/supervisor/%(program_name)s_error.log
 EOF
 
-RUN cat > /etc/supervisor/conf.d/cron.conf <<EOF
+RUN cat <<EOF > /etc/supervisor/conf.d/cron.conf
 [program:cron]
 priority=20
 directory=/tmp
@@ -127,7 +125,7 @@ stdout_logfile=/var/log/supervisor/%(program_name)s.log
 stderr_logfile=/var/log/supervisor/%(program_name)s.log
 EOF
 
-RUN cat > /etc/logrotate.d/supervisord <<EOF
+RUN cat <<EOF > /etc/logrotate.d/supervisord
 /var/log/supervisor/*.log {
     weekly
     missingok
