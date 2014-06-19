@@ -19,6 +19,10 @@ ENV INITRD no
 
 #### Executing all Transactions in Single Processes so they can be cached and replaced better with new packages
 #RUN chmod 644 /etc/insecure_key*
+RUN echo -e 'deb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse 
+             deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted universe multiverse 
+             deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-backports main restricted universe multiverse 
+             deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse' > /etc/apt/sources.list
 RUN apt-get update -y
 RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building faster."
 RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup 
