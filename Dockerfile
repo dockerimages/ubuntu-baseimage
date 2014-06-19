@@ -38,13 +38,13 @@ RUN ln -sf /bin/true /sbin/initctl && \
     ln -sf /bin/true /usr/bin/ischroot && \
     echo "ubuntu-baseimage: Upgrade sources.list to mirrors."
 RUN apt-get --no-install-recommends install -y curl wget sudo net-tools pwgen unzip \
-            language-pack-en software-properties-common syslog-ng-core \
-            logrotate openssh-server cron less nano psmisc git apt-transport-https ca-certificates language-pack-en && \
+            language-pack-en software-properties-common \
+            logrotate openssh-server cron less nano psmisc git apt-transport-https ca-certificates language-pack-en language-pack-de && \
     echo "ubuntu-baseimage: Setting Locale to en_US" && \
     locale-gen en_US && \
     echo "ubuntu-baseimage: ####################### Cleanup" && \
-    echo "ubuntu-baseimage: Upgrade all packages." && \
-    apt-get dist-upgrade -y && \
+    echo "ubuntu-baseimage: Upgrade all packages."
+RUN apt-get dist-upgrade -y && \
     apt-get clean && \
     rm -rf /build && \
     rm -rf /tmp/* /var/tmp/* && \
@@ -66,4 +66,4 @@ RUN apt-get --no-install-recommends install -y curl wget sudo net-tools pwgen un
 
 
 #### runit related
-CMD ["/sbin/my_init"]
+#CMD ["/sbin/my_init"]
