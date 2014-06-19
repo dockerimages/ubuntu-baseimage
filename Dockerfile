@@ -62,14 +62,13 @@ RUN echo "ubuntu-baseimage: Fix some issues with APT packages. See https://githu
             supervisor language-pack-en software-properties-common runit syslog-ng-core \
             logrotate openssh-server cron less nano psmisc git apt-transport-https ca-certificates language-pack-en && \
     echo "Syslog-NG: Creating some needed dirs and files" && \
-   
     echo "ubuntu-baseimage:# Replace the system() source because inside Docker we" && \
     echo "ubuntu-baseimage:# can't access /proc/kmsg." && \
     sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf && \
     echo "SSHD: Creating some needed dirs and files" && \
     mkdir /var/run/sshd && \
     mkdir -p /root/.ssh && \
-    chmod 700 /root/.ssh && 
+    chmod 700 /root/.ssh && \
     echo "INIT: Install init process." && \
     mkdir -p /etc/my_init.d && \
     mkdir -p /etc/container_environment && \
