@@ -40,9 +40,9 @@ ADD /setuser /sbin/setuser
 #### Executing all Transactions in Single Processes so they can be cached and replaced better with new packages
 RUN chmod 644 /etc/insecure_key*
 RUN apt-get update -y
-RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building faster." && \
-    echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup && \
-    echo "ubuntu-baseimage: Fix some issues with APT packages. See https://github.com/dotcloud/docker/issues/1024" && \
+RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building faster."
+RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup 
+RUN echo "ubuntu-baseimage: Fix some issues with APT packages. See https://github.com/dotcloud/docker/issues/1024" && \
     dpkg-divert --local --rename --add /sbin/initctl && \
     ln -sf /bin/true /sbin/initctl && \
     echo "ubuntu-baseimage: Prevent initramfs updates from trying to run grub and lilo." && \
@@ -56,12 +56,13 @@ RUN echo "ubuntu-baseimage: Temporarily disable dpkg fsync to make building fast
     echo "ubuntu-baseimage: https://bugs.launchpad.net/launchpad/+bug/974584" && \
     dpkg-divert --local --rename --add /usr/bin/ischroot && \
     ln -sf /bin/true /usr/bin/ischroot && \
+    mkdir -p /var/lib/syslog-ng && \
     echo "ubuntu-baseimage: Upgrade sources.list to mirrors." && \
     apt-get --no-install-recommends install -y curl wget sudo net-tools pwgen unzip \
             supervisor language-pack-en software-properties-common runit syslog-ng-core \
             logrotate openssh-server cron less nano psmisc git apt-transport-https ca-certificates language-pack-en && \
     echo "Syslog-NG: Creating some needed dirs and files" && \
-    mkdir -p /var/lib/syslog-ng && \
+   
     echo "ubuntu-baseimage:# Replace the system() source because inside Docker we" && \
     echo "ubuntu-baseimage:# can't access /proc/kmsg." && \
     sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf && \
