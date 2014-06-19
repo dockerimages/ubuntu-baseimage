@@ -6,7 +6,27 @@ FROM ubuntu:14.04
 # we're going to want this bad boy installed so we can connect :)
 RUN apt-get update && apt-get install -y ssh
 
-ADD init-fake.conf /etc/init/fake-container-events.conf
+RUN cat <<EOF > /etc/init/fake-container-events.conf
+
+# fake some events needed for correct startup other services
+
+description "In-Container Upstart Fake Events"
+
+start on startup
+
+script
+rm -rf /var/run/*.pid
+rm -rf /var/run/network/*
+/sbin/initctl emit stopped JOB=udevtrigger --no-wait
+/sbin/initctl emit started JOB=udev --no-wait
+/sbin/initctl emit runlevel RUNLEVEL=3 --no-wait
+end script
+EOF
+
+#ADD init-fake.conf /etc/init/fake-container-events.conf
+
+
+
 
 # undo some leet hax of the base image
 RUN rm /usr/sbin/policy-rc.d; \
