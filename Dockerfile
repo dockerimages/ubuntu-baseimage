@@ -56,9 +56,7 @@ RUN apt-get dist-upgrade -y && \
     echo "ubuntu-baseimage: # Checks for lost+found and scans for mtab." && \
     rm -f /etc/cron.daily/standard
 
-### Adding files at Start 
-ADD adduser /usr/sbin/adduser
-RUN chmod +x /usr/sbin/adduser
+
 
 
 
