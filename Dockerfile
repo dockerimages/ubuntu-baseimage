@@ -16,7 +16,7 @@ ENV INITRD no
 
 ### Adding files at Start 
 ADD adduser /usr/sbin/adduser
-chmod +x /usr/sbin/adduser
+RUN chmod +x /usr/sbin/adduser
 #### Executing all Transactions in Single Processes so they can be cached and replaced better with new packages
 #RUN chmod 644 /etc/insecure_key*
 ADD sources.list /etc/apt/sources.list
@@ -52,7 +52,7 @@ RUN apt-get dist-upgrade -y && \
     rm -rf /tmp/* /var/tmp/* && \
     rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup && \
-    rm -f /etc/ssh/ssh_host_*
+    rm -f /etc/ssh/ssh_host_* && \
     echo "ubuntu-baseimage: ## Remove useless cron entries." && \
     echo "ubuntu-baseimage: # Checks for lost+found and scans for mtab." && \
     rm -f /etc/cron.daily/standard
