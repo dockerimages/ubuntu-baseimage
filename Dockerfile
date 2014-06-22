@@ -15,8 +15,8 @@ ENV INITRD no
 #	set -x
 
 ### Adding files at Start 
-
-
+ADD adduser /usr/sbin/adduser
+chmod +x /usr/sbin/adduser
 #### Executing all Transactions in Single Processes so they can be cached and replaced better with new packages
 #RUN chmod 644 /etc/insecure_key*
 ADD sources.list /etc/apt/sources.list
