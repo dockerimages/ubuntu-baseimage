@@ -1,3 +1,0 @@
-#!/bin/bash
-echo "I am Replaced to fix a Issu with chfn in Containers when user exists"
-useradd $1
